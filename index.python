@@ -1,0 +1,218 @@
+
+import tkinter as tk
+import sqlite3
+from tkinter import messagebox
+conexao = sqlite3.connect("oficina.db")
+cursor = conexao.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS clientes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    telefone TEXT NOT NULL,
+    marca TEXT NOT NULL,
+    modelo TEXT NOT NULL,
+    placa TEXT NOT NULL
+)
+""")
+
+conexao.commit()
+import tkinter as tk
+import sqlite3
+from tkinter import messagebox
+conexao = sqlite3.connect("oficina.db")
+cursor = conexao.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS clientes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    telefone TEXT NOT NULL,
+    marca TEXT NOT NULL,
+    modelo TEXT NOT NULL,
+    placa TEXT NOT NULL
+)
+""")
+
+conexao.commit()
+
+janela = tk.Tk()
+janela.title("Oficina Mecânica")
+janela.geometry("600x500")
+
+
+tk.Label(
+    janela,
+    text="CADASTRO DE CLIENTES E VEÍCULOS",
+    font=("Arial", 16)
+).pack(pady=20)
+
+tk.Label(janela, text="Nome do cliente:").pack()
+nome = tk.Entry(janela)
+nome.pack()
+
+tk.Label(janela, text="Telefone:").pack()
+telefone = tk.Entry(janela)
+telefone.pack()
+
+tk.Label(janela, text="Marca do veículo:").pack()
+marca = tk.Entry(janela)
+marca.pack()
+
+tk.Label(janela, text="Modelo do veículo:").pack()
+modelo = tk.Entry(janela)
+modelo.pack()
+
+tk.Label(janela, text="Placa:").pack()
+placa = tk.Entry(janela)
+placa.pack()
+
+
+def cadastrar():
+
+    nome_cliente = nome.get()
+    telefone_cliente = telefone.get()
+    marca_veiculo = marca.get()
+    modelo_veiculo = modelo.get()
+    placa_veiculo = placa.get()
+
+    # Verificar se os campos estão preenchidos
+    if (
+        nome_cliente == "" or
+        telefone_cliente == "" or
+        marca_veiculo == "" or
+        modelo_veiculo == "" or
+        placa_veiculo == ""
+    ):
+        messagebox.showwarning(
+            "Atenção",
+            "Preencha todos os campos!"
+        )
+        return
+
+    # Salvar os dados no banco
+    cursor.execute("""
+    INSERT INTO clientes
+    (nome, telefone, marca, modelo, placa)
+    VALUES (?, ?, ?, ?, ?)
+    """, (
+        nome_cliente,
+        telefone_cliente,
+        marca_veiculo,
+        modelo_veiculo,
+        placa_veiculo
+    ))
+
+    conexao.commit()
+
+    messagebox.showinfo(
+        "Sucesso",
+        "Cliente cadastrado e salvo!"
+    )
+
+    # Limpar os campos após salvar
+    nome.delete(0, tk.END)
+    telefone.delete(0, tk.END)
+    marca.delete(0, tk.END)
+    modelo.delete(0, tk.END)
+    placa.delete(0, tk.END)
+
+
+botao = tk.Button(
+    janela,
+    text="Cadastrar",
+    command=cadastrar
+)
+
+botao.pack(pady=20)
+janela.mainloop()
+
+conexao.close()
+
+
+janela = tk.Tk()
+janela.title("Oficina Mecânica")
+janela.geometry("600x500")
+
+tk.Label(
+    janela,
+    text="CADASTRO DE CLIENTES E VEÍCULOS",
+    font=("Arial", 16)
+).pack(pady=20)
+
+tk.Label(janela, text="Nome do cliente:").pack()
+nome = tk.Entry(janela)
+nome.pack()
+
+tk.Label(janela, text="Telefone:").pack()
+telefone = tk.Entry(janela)
+telefone.pack()
+
+tk.Label(janela, text="Marca do veículo:").pack()
+marca = tk.Entry(janela)
+marca.pack()
+
+tk.Label(janela, text="Modelo do veículo:").pack()
+modelo = tk.Entry(janela)
+modelo.pack()
+
+tk.Label(janela, text="Placa:").pack()
+placa = tk.Entry(janela)
+placa.pack()
+
+def cadastrar():
+
+    nome_cliente = nome.get()
+    telefone_cliente = telefone.get()
+    marca_veiculo = marca.get()
+    modelo_veiculo = modelo.get()
+    placa_veiculo = placa.get()
+
+    # Verificar se os campos estão preenchidos
+    if (
+        nome_cliente == "" or
+        telefone_cliente == "" or
+        marca_veiculo == "" or
+        modelo_veiculo == "" or
+        placa_veiculo == ""
+    ):
+        messagebox.showwarning(
+            "Atenção",
+            "Preencha todos os campos!"
+        )
+        return
+
+    # Salvar os dados no banco
+    cursor.execute("""
+    INSERT INTO clientes
+    (nome, telefone, marca, modelo, placa)
+    VALUES (?, ?, ?, ?, ?)
+    """, (
+        nome_cliente,
+        telefone_cliente,
+        marca_veiculo,
+        modelo_veiculo,
+        placa_veiculo
+    ))
+
+    conexao.commit()
+
+    messagebox.showinfo(
+        "Sucesso",
+        "Cliente cadastrado e salvo!"
+    )
+
+    # Limpar os campos após salvar
+    nome.delete(0, tk.END)
+    telefone.delete(0, tk.END)
+    marca.delete(0, tk.END)
+    modelo.delete(0, tk.END)
+    placa.delete(0, tk.END)
+
+botao = tk.Button(
+    janela,
+    text="Cadastrar",
+    command=cadastrar
+)
+
+botao.pack(pady=20)
