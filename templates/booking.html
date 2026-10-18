@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Agendar horário · Nego do Corte 2K{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('home') }}">← Início</a>
+<section class="form-page">
+  <span class="kicker">RESERVE SEU MOMENTO</span>
+  <h1>Agendar horário<span class="gold">.</span></h1>
+  <p>Escolha o barbeiro, o serviço, o dia e um horário disponível.</p>
+  {% if barbers %}
+  <form method="get" class="day-picker">
+    <label>Barbeiro
+      <select name="barber_id" required>
+        <option value="">Selecione o barbeiro</option>
+        {% for barber in barbers %}<option value="{{ barber.id }}" {% if barber.id == selected_barber_id %}selected{% endif %}>{{ barber.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Dia<input type="date" name="day" value="{{ day }}" min="{{ min_day }}" required></label>
+    <button class="button dark-button" type="submit">Ver horários</button>
+  </form>
+  {% else %}
+  <div class="panel empty">A barbearia ainda não cadastrou um barbeiro. Entre em contato para agendar.</div>
+  {% endif %}
+  {% if selected_barber_id %}
+  <form method="post" class="panel form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="day" value="{{ day }}">
+    <input type="hidden" name="barber_id" value="{{ selected_barber_id }}">
+    <label>Serviço<select name="service" required><option value="">Selecione o serviço</option>{% for service in services %}<option value="{{ service }}">{{ service }}</option>{% endfor %}</select></label>
+    <fieldset><legend>Horários disponíveis com o barbeiro escolhido</legend>
+      {% if slots %}<div class="slots">{% for slot in slots %}<label class="slot"><input type="radio" name="slot" value="{{ slot.strftime('%Y-%m-%d %H:%M') }}" required><span>{{ slot.strftime('%H:%M') }}</span></label>{% endfor %}</div>
+      {% else %}<p class="empty">Não há horários disponíveis com este barbeiro nesse dia. Escolha outra data ou profissional.</p>{% endif %}
+    </fieldset>
+    {% if slots %}<button class="button gold-button" type="submit">Solicitar agendamento →</button>{% endif %}
+  </form>
+  {% endif %}
+  <p class="fineprint">O horário fica pendente até o barbeiro confirmar.</p>
+</section>
+{% endblock %}
