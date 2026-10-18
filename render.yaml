@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: nego-do-corte-2k
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --threads 4 --timeout 60
+    healthCheckPath: /
+    disk:
+      name: barbearia-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: BARBEARIA_DATA_DIR
+        value: /var/data
+      - key: BARBEARIA_SECRET_KEY
+        generateValue: true
+      - key: BARBEARIA_HTTPS
+        value: "1"

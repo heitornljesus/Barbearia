@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Agenda do barbeiro' if supervisor else 'Meus horários' }} · Nego do Corte 2K{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('home') }}">← Início</a>
+<section class="form-page wide-page">
+  <span class="kicker">{{ 'AGENDA DO BARBEIRO' if supervisor else 'SUA AGENDA' }}</span>
+  <h1>{{ 'Agendamentos' if supervisor else 'Meus horários' }}<span class="gold">.</span></h1>
+  <div class="appointment-list">
+    {% for a in appointments %}
+    <article class="appointment panel">
+      <div>
+        <span class="appointment-date">{{ a.starts_at }}</span>
+        <h3>{{ a.service }}</h3>
+        {% if supervisor %}<p>Cliente: {{ a.customer_name }} · {{ a.customer_email }}</p>{% endif %}
+        <p>Barbeiro: {{ a.barber_name or 'A definir' }}</p>
+      </div>
+      <span class="status status-{{ a.status|lower }}">{{ a.status }}</span>
+      {% if supervisor and a.status=='Pendente' %}
+      <form method="post" action="{{ url_for('update_appointment',appointment_id=a.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="button small dark-button" name="status" value="Confirmado">Confirmar</button>
+        <button class="button small subtle-button" name="status" value="Cancelado">Cancelar</button>
+      </form>
+      {% endif %}
+    </article>
+    {% else %}<div class="panel empty">Nenhum agendamento por enquanto.</div>{% endfor %}
+  </div>
+</section>
+{% endblock %}
